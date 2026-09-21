@@ -41,6 +41,16 @@ Typical causes include upstream API changes, missing fields, unexpected null val
 - Structured anomaly metadata for IF/Switch/alert routing
 - Local execution: workflow payloads are not sent to an external SchemaGuard service
 
+## Installation
+
+Install the package as an n8n community node using:
+
+```text
+@nimoniz/n8n-nodes-schemaguard
+```
+
+For self-hosted n8n, install it from the Community Nodes settings using the package name above.
+
 ## Example
 
 Baseline:
@@ -69,6 +79,8 @@ SchemaGuard can return:
     "status": "blocked",
     "blocked": true,
     "anomalyCount": 1,
+    "blockingCount": 1,
+    "warningCount": 0,
     "anomalies": [
       {
         "kind": "typeChanged",
@@ -95,37 +107,97 @@ IF _schemaGuard.blocked
  └─ false → CRM / DB / downstream workflow
 ```
 
-## Installation
-
-Once published to npm, install the package as a community node using:
-
-```text
-n8n-nodes-schemaguard
-```
-
-For local development:
-
-```bash
-npm install
-npm run build
-npm test
-npm run dev
-```
-
 ## Recommended first test
 
-1. Set **Operation** to `Reset Baseline From Current Input`.
-2. Send input where `id` is an integer.
-3. Switch **Operation** back to `Protect Workflow`.
-4. Send the same data again and confirm `status = ok`.
-5. Change `id` to a string.
-6. Confirm SchemaGuard reports `integer → string`.
+1. Add SchemaGuard to your workflow.
+2. Set **Operation** to `Reset Baseline From Current Input`.
+3. Send input where `id` is an integer.
+4. Switch **Operation** back to `Protect Workflow`.
+5. Send the same data again and confirm `status = ok`.
+6. Change `id` to a string.
+7. Confirm SchemaGuard reports `integer → string`.
+
+## Baseline strategies
+
+SchemaGuard supports two baseline strategies:
+
+### Learn Once
+
+The initial baseline is learned once and remains unchanged until you manually reset or clear it.
+
+### Refresh After Healthy Run
+
+The baseline is updated after a healthy execution with no detected anomalies.
+
+## Policies
+
+Each anomaly type can be configured independently with one of these policies:
+
+- `Ignore`
+- `Warn`
+- `Block`
+
+Supported anomaly policies include:
+
+- Added Field
+- Removed Field
+- Type Change
+- Null Rate Spike
+- Field Presence Drop
+- Item Count Change
+- Empty Output
+
+## Block behavior
+
+When a blocking anomaly is detected, SchemaGuard can either:
+
+### Stop Workflow
+
+The node throws an n8n error and stops workflow execution.
+
+### Return Structured Result
+
+The workflow continues and each output item receives `_schemaGuard` metadata.
+
+This mode is useful when you want to route failures yourself using an IF or Switch node.
+
+Example condition:
+
+```text
+{{ $json._schemaGuard.blocked }}
+```
+
+## Ignored paths
+
+Use `Ignored Paths` for fields whose structure is intentionally volatile.
+
+Examples:
+
+```text
+updatedAt
+metadata.*
+orders[].traceId
+```
+
+Multiple paths can be separated by commas or new lines.
 
 ## Baseline persistence
 
-SchemaGuard currently stores its baseline using n8n workflow static data. For realistic persistence testing, use an active/published workflow with a production trigger such as a production webhook. Manual editor test executions may not persist static data between runs.
+SchemaGuard stores its baseline using n8n workflow static data.
 
-## Development commands
+For realistic persistence testing, use an active workflow with a production trigger such as a production webhook.
+
+Manual editor test executions may not persist static data between runs.
+
+## Privacy
+
+SchemaGuard performs its analysis inside the n8n node.
+
+It does not send workflow payloads to an external SchemaGuard service.
+
+## Development
+
+Clone the repository and run:
 
 ```bash
 npm install
@@ -135,6 +207,8 @@ npm run lint
 npm run dev
 ```
 
+## Validation
+
 Before publishing:
 
 ```bash
@@ -142,11 +216,31 @@ npm run validate
 npm pack --dry-run
 ```
 
-See `PUBLISH_CHECKLIST.md` for the complete first-release checklist.
+You can also run the official n8n community package scanner:
 
-## Privacy
+```bash
+npx @n8n/scan-community-package @nimoniz/n8n-nodes-schemaguard
+```
 
-SchemaGuard v0.3 performs its analysis inside the n8n node. It does not send workflow payloads to an external SchemaGuard service.
+## Security
+
+SchemaGuard has passed the n8n community package security scanner.
+
+The project does not require runtime dependencies beyond n8n itself and does not access the filesystem or environment variables during node execution.
+
+## Repository
+
+GitHub:
+
+```text
+https://github.com/Nimoniz/n8n-nodes-schemaguard
+```
+
+npm:
+
+```text
+@nimoniz/n8n-nodes-schemaguard
+```
 
 ## License
 

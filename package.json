@@ -1,6 +1,6 @@
 {
   "name": "@nimoniz/n8n-nodes-schemaguard",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Protect n8n workflows against schema drift, empty outputs, null spikes, and abnormal item counts.",
   "license": "MIT",
   "keywords": [
