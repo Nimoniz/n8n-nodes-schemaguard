@@ -1,0 +1,60 @@
+{
+  "name": "n8n-nodes-schemaguard",
+  "version": "0.3.0",
+  "description": "Protect n8n workflows against schema drift, empty outputs, null spikes, and abnormal item counts.",
+  "license": "MIT",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "schema-drift",
+    "data-validation",
+    "workflow-monitoring",
+    "automation"
+  ],
+  "scripts": {
+    "build": "n8n-node build",
+    "dev": "n8n-node dev",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "release": "n8n-node release",
+    "prepublishOnly": "npm run check:publish && n8n-node prerelease",
+    "check:publish": "node scripts/check-publish.mjs",
+    "validate": "npm run build && npm test && npm run lint"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "nodes": [
+      "dist/nodes/SchemaGuard/SchemaGuard.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "*",
+    "eslint": "9.39.4",
+    "prettier": "3.8.3",
+    "release-it": "20.2.0",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "homepage": "https://github.com/Nimoniz/n8n-nodes-schemaguard#readme",
+  "author": {
+    "name": "Nimoniz",
+    "email": "nimoniz@protonmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nimoniz/n8n-nodes-schemaguard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nimoniz/n8n-nodes-schemaguard/issues"
+  },
+  "dependencies": {
+    "n8n-nodes-schemaguard": "file:n8n-nodes-schemaguard-0.3.0.tgz"
+  }
+}

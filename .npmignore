@@ -1,0 +1,10 @@
+.github/
+examples/
+scripts/
+tests/
+QUICKSTART.md
+PUBLISH_CHECKLIST.md
+CONTRIBUTING.md
+SECURITY.md
+CHANGELOG.md
+*.zip

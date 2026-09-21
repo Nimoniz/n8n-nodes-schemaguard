@@ -1,0 +1,10 @@
+{
+  "name": "SchemaGuard - Webhook routing example",
+  "nodes": [],
+  "connections": {},
+  "active": false,
+  "settings": {},
+  "meta": {
+    "note": "Export your validated Webhook -> Extract Body -> SchemaGuard -> IF -> CRM/Alert workflow from n8n and replace this placeholder before the public release."
+  }
+}
