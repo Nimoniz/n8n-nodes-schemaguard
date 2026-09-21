@@ -1,5 +1,5 @@
 {
-  "name": "n8n-nodes-schemaguard",
+  "name": "@nimoniz/n8n-nodes-schemaguard",
   "version": "0.3.0",
   "description": "Protect n8n workflows against schema drift, empty outputs, null spikes, and abnormal item counts.",
   "license": "MIT",
@@ -22,13 +22,13 @@
     "check:publish": "node scripts/check-publish.mjs",
     "validate": "npm run build && npm test && npm run lint"
   },
- "files": [
-  "dist"
-],
-"publishConfig": {
-  "access": "public"
-},
-"n8n": {
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "n8n": {
     "n8nNodesApiVersion": 1,
     "strict": true,
     "nodes": [
