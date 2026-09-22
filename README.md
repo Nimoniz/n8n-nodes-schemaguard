@@ -41,6 +41,26 @@ Typical causes include upstream API changes, missing fields, unexpected null val
 - Structured anomaly metadata for IF/Switch/alert routing
 - Local execution: workflow payloads are not sent to an external SchemaGuard service
 
+## Demo
+
+### Healthy payload
+
+SchemaGuard lets the workflow continue when the incoming data matches the learned baseline.
+
+![Healthy SchemaGuard workflow](docs/workflow-ok.png)
+
+### Breaking schema drift
+
+When `body.id` changes from an integer to a string, SchemaGuard routes the workflow to the blocked branch.
+
+![Blocked SchemaGuard workflow](docs/workflow-blocked.png)
+
+### Structured anomaly details
+
+SchemaGuard returns structured metadata describing exactly what changed.
+
+![SchemaGuard anomaly details](docs/blocked-details.png)
+
 ## Installation
 
 Install the package as an n8n community node using:
