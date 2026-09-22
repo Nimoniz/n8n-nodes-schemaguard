@@ -1,10 +1,181 @@
 {
-  "name": "SchemaGuard - Webhook routing example",
-  "nodes": [],
-  "connections": {},
-  "active": false,
-  "settings": {},
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f2bb3f1d-82f6-4f69-8eb0-2cfbe0d63347",
+              "name": "body",
+              "value": "={{ $json.body }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1024,
+        688
+      ],
+      "id": "e7cd2ae9-34a4-490c-994d-62fab3cd6935",
+      "name": "Extract Body"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eb95fcd7-1968-4594-8687-6c7e5b5db29b",
+              "leftValue": "={{ $json._schemaGuard.blocked }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -480,
+        688
+      ],
+      "id": "1988c2f1-b33b-4291-8884-af0c8639391e",
+      "name": "Blocked?"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 422
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -176,
+        560
+      ],
+      "id": "feadc441-f176-4899-b5b3-48dc20fb92d5",
+      "name": "Respond Blocked"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -176,
+        800
+      ],
+      "id": "0e0c4a20-12bc-44fa-94a3-7615ba56ebda",
+      "name": "Respond OK"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "schemaguard-example",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1264,
+        688
+      ],
+      "id": "15e35986-6d3a-49dc-a660-4446a4f6a90e",
+      "name": "Webhook1",
+      "webhookId": "31d8a2d9-e424-414a-b889-6528879b65d0"
+    },
+    {
+      "parameters": {
+        "blockBehavior": "return"
+      },
+      "type": "@nimoniz/n8n-nodes-schemaguard.schemaGuard",
+      "typeVersion": 1,
+      "position": [
+        -752,
+        688
+      ],
+      "id": "fb696722-073b-4258-ad7f-feaa29593641",
+      "name": "SchemaGuard1"
+    }
+  ],
+  "connections": {
+    "Extract Body": {
+      "main": [
+        [
+          {
+            "node": "SchemaGuard1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Blocked?": {
+      "main": [
+        [
+          {
+            "node": "Respond Blocked",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Extract Body",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SchemaGuard1": {
+      "main": [
+        [
+          {
+            "node": "Blocked?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
   "meta": {
-    "note": "Export your validated Webhook -> Extract Body -> SchemaGuard -> IF -> CRM/Alert workflow from n8n and replace this placeholder before the public release."
+    "instanceId": "d5df5b48db0fa2c3c0c5c7c5f83199f5e70f49e2da61524535c126c30a0149ba"
   }
 }
